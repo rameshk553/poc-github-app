@@ -22,9 +22,12 @@ jobs:
       - name: print content
         run: ls
         
-      - name: checkout code
+      - name: checkout another repo
         uses: actions/checkout@v4.2.2
         with:
           token: ${{ steps.app-token.outputs.token }}
-          repository: rameshk553/look_and_say
+          repository: rameshk553/test-poc-github-app
+          
+      - name: print content
+        run: ls
       
