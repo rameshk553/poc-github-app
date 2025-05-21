@@ -12,8 +12,7 @@ jobs:
         with:
           app-id: ${{ vars.GH_APPLICATION_ID }}
           private-key: ${{ secrets.GH_APPLICATION_KEY }}
-          owner: rameshk553
-          repositories: test-poc-github-app
+          owner: ${{ github.repository_owner }}
 
       - name: checkout code
         uses: actions/checkout@v4.2.2
