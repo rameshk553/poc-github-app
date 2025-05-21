@@ -1,0 +1,24 @@
+name: Use Github App
+on:
+  workflow_dispatch:
+
+jobs:
+  checkout-other-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.GH_APPLICATION_ID }}
+          private-key: ${{ secrets.GH_APPLICATION_KEY }}
+
+      - name: checkout code
+        uses: actions/checkout@v4.2.2
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          repository: rameshk553/test_context_options
+
+      - name: print content
+        run: ls 
+      
