@@ -20,5 +20,11 @@ jobs:
           repository: rameshk553/test_context_options
 
       - name: print content
-        run: ls 
+        run: ls
+        
+      - name: checkout code
+        uses: actions/checkout@v4.2.2
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          repository: rameshk553/look_and_say
       
