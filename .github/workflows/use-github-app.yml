@@ -36,4 +36,27 @@ jobs:
               }
             }
           }"
+
+      - name: create label on another repo
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          OWNER: rameshk553
+          REPO: test-poc-github-app
+          LABEL_NAME: my-label1
+          LABEL_COLOR: F29513
+        run:  |
+          REPO_ID=$(gh api graphql -f query="query { repository(owner: \"$OWNER\", name: \"$REPO\") { id } }" \
+            --jq '.data.repository.id')
+
+          gh api graphql -f query="mutation {
+            createLabel(input: {
+              repositoryId: \"$REPO_ID\",
+              name: \"$LABEL_NAME\",
+              color: \"$LABEL_COLOR\"
+            }) {
+              label {
+                name
+              }
+            }
+          }"
       
