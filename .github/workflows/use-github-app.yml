@@ -14,21 +14,26 @@ jobs:
           private-key: ${{ secrets.GH_APPLICATION_KEY }}
           owner: ${{ github.repository_owner }}
 
-      - name: checkout code
-        uses: actions/checkout@v4.2.2
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          repository: rameshk553/test_context_options
+      - name: create label on current repo
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          OWNER: rameshk553
+          REPO: poc-github-app
+          LABEL_NAME: my-label
+          LABEL_COLOR: F29513
+        run:  |
+          REPO_ID=$(gh api graphql -f query="query { repository(owner: \"$OWNER\", name: \"$REPO\") { id } }" \
+            --jq '.data.repository.id')
 
-      - name: print content
-        run: ls
-        
-      - name: checkout another repo
-        uses: actions/checkout@v4.2.2
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          repository: rameshk553/test-poc-github-app
-          
-      - name: print content
-        run: ls
+          gh api graphql -f query="mutation {
+            createLabel(input: {
+              repositoryId: \"$REPO_ID\",
+              name: \"$LABEL_NAME\",
+              color: \"$LABEL_COLOR\"
+            }) {
+              label {
+                name
+              }
+            }
+          }"
       
